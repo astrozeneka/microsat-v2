@@ -23,6 +23,42 @@ static PyObject *microsatellite_searchssr(PyObject *self, PyObject *args){
     PyObject *result = PyList_New(0);
     PyObject *tmp;
 
+    if(!PyArg_ParseTuple(args, "s(iiiiii)", &seq, &mono, &di, &tri, &tetra, &penta, &hexa))
+        return NULL;
+    rep[0] = mono;
+    rep[1] = di;
+    rep[2] = tri;
+    rep[3] = tetra;
+    rep[4] = penta;
+    rep[5] = hexa;
+
+    len = strlen(seq);
+    for (i=0; i<len; i++) {
+        if (seq[i] == 78)
+            continue;
+
+        for (j=1; j<=6; j++) {
+            start = i;
+            length = j;
+            while(start+length<len && seq[i]==seq[i+j] && seq[i]!=78){
+                i++;
+                length++;
+            }
+            repeat = length/j;
+            if(repeat>=rep[j-1]) {
+                strncpy(motif, seq+start, j);
+                motif[j] = '\0';
+                length = repeat*j;
+                tmp = Py_BuildValue("(siiiii)", motif, j, repeat, start+1, start+length, length);
+                PyList_Append(result, tmp);
+                Py_DECREF(tmp);
+                i = start + length;
+                j = 0;
+            } else {
+                i = start;
+            }
+        }
+    }
     return result;
 }
 
