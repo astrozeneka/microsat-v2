@@ -9,7 +9,7 @@ import os
 
 def search_microsat(keyword, min_repeats, use_cache):
     file_name = f"../data/fasta/{keyword[:3]}/{keyword}.fasta"
-    print(f"Search microsatellite in {keyword}")
+    print(f"Search microsatellites in {keyword}")
     record = SeqIO.read(file_name, "fasta")
     tsv_file = f"../data/tmp/{keyword}.tsv"
     if use_cache and os.path.isfile(tsv_file):
@@ -17,8 +17,11 @@ def search_microsat(keyword, min_repeats, use_cache):
     res = microsatellite.searchssr(str(record.seq), min_repeats)
     with open(tsv_file, "w") as f:
         f.write("\n".join(["\t".join([str(a) for a in b]) for b in res]))
+    return res
 
-
+def genome_chromosome_list(genome):
+    output = glob(f"../data/fasta/{genome}/*.fasta")
+    print()
 
 if __name__ == '__main__':
 
@@ -28,6 +31,8 @@ if __name__ == '__main__':
         for fn in tmp_list:
             os.unlink(fn)
 
-    rec = SeqIO.read("../data/LAG01.fasta", "fasta")
-    search_microsat("LAG1", MIN_REPEATS, USE_CACHE)
-    # res = microsatellite.searchssr(str(rec.seq), min_repeats)
+    GENOME = GENOMES[0]
+    chr_list = genome_chromosome_list(GENOME)
+
+    #rec = SeqIO.read("../data/LAG01.fasta", "fasta")
+    #search_microsat("LAG1", MIN_REPEATS, USE_CACHE)

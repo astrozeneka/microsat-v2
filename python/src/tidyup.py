@@ -11,7 +11,9 @@ name_symbol_list = [
     ("crotalus viridis", "CVI"),
     ("naja naja", "NNA"),
     ("anolis carolinensis", "ACA"),
-    ("falco naumanni", "FNA")
+    ("falco naumanni", "FNA"),
+    ("clarias gariepinus", "CGA"),
+    ("homo sapiens", "HSA")
 ]
 chr_name_symbol_list = [
     f"chromosome {a.lower()}"
