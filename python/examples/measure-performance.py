@@ -1,5 +1,5 @@
 
-from src.utils import search_microsat
+from utils import search_microsat
 from time import time
 
 MIN_REPEATS = (12,7,5,4,4,4)
