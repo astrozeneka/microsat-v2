@@ -11,6 +11,7 @@ import os
 import argparse
 parser = argparse.ArgumentParser(description='MicrosatNavigator: Analyze microsatellite')
 parser.add_argument('--fasta', help='Fisher association data')
+parser.add_argument('--output', help='Output file')
 args = parser.parse_args()
 
 def search_microsat(keyword, min_repeats, use_cache):
@@ -21,7 +22,8 @@ def search_microsat(keyword, min_repeats, use_cache):
     if use_cache and os.path.isfile(tsv_file):
         return
     res = microsatellite.searchssr(str(record.seq), min_repeats)
-    tsv_file = args.fasta.replace(".fasta", ".tsv").replace(".fna", ".tsv").replace(".fa", ".tsv")
+    tsv_file = args.output
+    #tsv_file = args.fasta.replace(".fasta", ".tsv").replace(".fna", ".tsv").replace(".fa", ".tsv")
     with open(tsv_file, "w") as f:
         f.write("\n".join(["\t".join([str(a) for a in b]) for b in res]))
     return res
