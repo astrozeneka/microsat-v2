@@ -54,19 +54,23 @@ def search_microsat_fastq(keyword, min_repeats):
     print("Done")
 
 def search_microsat(keyword, min_repeats, use_cache):
-    file_name = args.fasta
+    with open(args.output, "w") as f:
+        f.write("")
     print(f"Search microsatellites in {keyword}")
-    record = SeqIO.read(file_name, "fasta")
-    tsv_file = f"../data/tmp/{keyword}.tsv"
-    if use_cache and os.path.isfile(tsv_file):
-        return
-    res = microsatellite.searchssr(str(record.seq), min_repeats)
-    tsv_file = args.output
-    #tsv_file = args.fasta.replace(".fasta", ".tsv").replace(".fna", ".tsv").replace(".fa", ".tsv")
-    with open(tsv_file, "w") as f:
-        f.write("\n".join(["\t".join([str(a) for a in b]) for b in res]))
-    return res
-
+    counter = 0
+    for record in SeqIO.parse(args.fasta, 'fasta'):
+        res = microsatellite.searchssr(str(record.seq), min_repeats)
+        res = [[record.name] + list(a) for a in res]
+        if args.standardize:
+            for i, row in enumerate(res):
+                res[i][1] = get_motif_standard(row[1])
+        tsv = "\n".join(['\t'.join([str(a) for a in b]) for b in res])
+        tsv += "\n" if len(tsv) > 0 else ""
+        with open(args.output, 'a') as f:
+            f.write(tsv)
+        counter += 1
+        if counter % 100000 == 0:
+            print(f"{counter/1000}K loci ...")
 def genome_chromosome_list(genome):
     output = glob(f"../data/fasta/{genome}/*.fasta")
     print()
