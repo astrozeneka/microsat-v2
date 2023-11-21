@@ -69,7 +69,7 @@ def search_microsat(keyword, min_repeats, use_cache):
         with open(args.output, 'a') as f:
             f.write(tsv)
         counter += 1
-        if counter % 100000 == 0:
+        if counter % 1000000 == 0:
             print(f"{int(counter/1000000)}M reads ...")
     print("Analysis done")
 
