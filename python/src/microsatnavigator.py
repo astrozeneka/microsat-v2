@@ -29,6 +29,7 @@ def get_motif_standard(motif):
         options.append(ex)
         options.append(str(Seq(ex).complement()))
     def cost(motif):
+        motif = motif.upper()
         output = 0
         for i in range(len(motif)):
             output += 2**(len(motif)-i-1) * "ACTGNMKWRY".index(motif[i])
